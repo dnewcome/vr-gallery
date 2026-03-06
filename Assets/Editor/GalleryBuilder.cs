@@ -46,6 +46,52 @@ public static class GalleryBuilder
 
     // ── Entry point ──────────────────────────────────────────────────────────
 
+    [MenuItem("Gallery/Add Exterior Ground")]
+    static void AddExteriorGround()
+    {
+        var existing = GameObject.Find("Exterior Ground");
+        if (existing != null)
+        {
+            if (!EditorUtility.DisplayDialog("Add Exterior Ground",
+                    "A GameObject named 'Exterior Ground' already exists. Replace it?", "Replace", "Cancel"))
+                return;
+            Undo.DestroyObjectImmediate(existing);
+        }
+
+        var mat = MakeMaterial("Mat_Ground", new Color(0.35f, 0.38f, 0.30f)); // muted green-gray
+        var go = GameObject.CreatePrimitive(PrimitiveType.Cube);
+        go.name = "Exterior Ground";
+        go.transform.localPosition = new Vector3(0f, -0.05f, 0f);
+        go.transform.localScale    = new Vector3(300f, 0.10f, 300f);
+        SetMat(go, mat);
+        Undo.RegisterCreatedObjectUndo(go, "Add Exterior Ground");
+        Selection.activeGameObject = go;
+        Debug.Log("[GalleryBuilder] Exterior ground added (300m x 300m).");
+    }
+
+    [MenuItem("Gallery/Add Floor")]
+    static void AddFloor()
+    {
+        var existing = GameObject.Find("Floor");
+        if (existing != null)
+        {
+            if (!EditorUtility.DisplayDialog("Add Floor",
+                    "A GameObject named 'Floor' already exists. Replace it?", "Replace", "Cancel"))
+                return;
+            Undo.DestroyObjectImmediate(existing);
+        }
+
+        var floorMat = MakeMaterial("Mat_Floor", new Color(0.55f, 0.55f, 0.55f));
+        var go = GameObject.CreatePrimitive(PrimitiveType.Cube);
+        go.name = "Floor";
+        go.transform.localPosition = new Vector3(0, -0.05f, 0);
+        go.transform.localScale    = new Vector3(W, 0.10f, D);
+        SetMat(go, floorMat);
+        Undo.RegisterCreatedObjectUndo(go, "Add Floor");
+        Selection.activeGameObject = go;
+        Debug.Log("[GalleryBuilder] Floor added.");
+    }
+
     [MenuItem("Gallery/Build VR Gallery")]
     static void Build()
     {
